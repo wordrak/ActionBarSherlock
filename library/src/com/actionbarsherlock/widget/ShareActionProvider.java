@@ -160,7 +160,7 @@ public class ShareActionProvider extends ActionProvider {
     @Override
     public View onCreateActionView() {
         // Create the view and set its data model.
-        ActivityChooserModel dataModel = ActivityChooserModel.get(mContext, mShareHistoryFileName);
+        ActivityChooserModel dataModel = getActivityChooserModel();
         ActivityChooserView activityChooserView = new ActivityChooserView(mContext);
         activityChooserView.setActivityChooserModel(dataModel);
 
@@ -196,7 +196,7 @@ public class ShareActionProvider extends ActionProvider {
         // Clear since the order of items may change.
         subMenu.clear();
 
-        ActivityChooserModel dataModel = ActivityChooserModel.get(mContext, mShareHistoryFileName);
+        ActivityChooserModel dataModel = getActivityChooserModel();
         PackageManager packageManager = mContext.getPackageManager();
 
         final int expandedActivityCount = dataModel.getActivityCount();
@@ -263,8 +263,7 @@ public class ShareActionProvider extends ActionProvider {
      * @see Intent#ACTION_SEND_MULTIPLE
      */
     public void setShareIntent(Intent shareIntent) {
-        ActivityChooserModel dataModel = ActivityChooserModel.get(mContext,
-            mShareHistoryFileName);
+        ActivityChooserModel dataModel = getActivityChooserModel();
         dataModel.setIntent(shareIntent);
     }
 
@@ -274,8 +273,7 @@ public class ShareActionProvider extends ActionProvider {
     private class ShareMenuItemOnMenuItemClickListener implements OnMenuItemClickListener {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            ActivityChooserModel dataModel = ActivityChooserModel.get(mContext,
-                    mShareHistoryFileName);
+            ActivityChooserModel dataModel = getActivityChooserModel();
             final int itemId = item.getItemId();
             Intent launchIntent = dataModel.chooseActivity(itemId);
             if (launchIntent != null) {
@@ -296,7 +294,7 @@ public class ShareActionProvider extends ActionProvider {
         if (mOnChooseActivityListener == null) {
             mOnChooseActivityListener = new ShareAcitivityChooserModelPolicy();
         }
-        ActivityChooserModel dataModel = ActivityChooserModel.get(mContext, mShareHistoryFileName);
+        ActivityChooserModel dataModel = getActivityChooserModel();
         dataModel.setOnChooseActivityListener(mOnChooseActivityListener);
     }
 
@@ -312,5 +310,9 @@ public class ShareActionProvider extends ActionProvider {
             }
             return false;
         }
+    }
+
+    protected ActivityChooserModel getActivityChooserModel() {
+        return ActivityChooserModel.get(mContext, mShareHistoryFileName);
     }
 }
